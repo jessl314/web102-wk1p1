@@ -1,52 +1,43 @@
 import React from 'react';
-import Card from './Card';
-import june1 from '../assets/june1.png';
+import { events } from '../data/events';
+import './Cards.css';
+
+const groupByMonth = (eventsArray) => {
+    const grouped = {};
+    for (const event of eventsArray) {
+        if(!grouped[event.month]) {
+            grouped[event.month] = [];
+        }
+        grouped[event.month].push(event);
+    }
+    return grouped;
+};
 
 const Cards = () => {
-
-const j1 = `This isn't your typical requiem; it's Verdi unbuttoned and unbound. With St.Clair's commentary slicing through the history and straight to the heart, expect a visceral journey through the "Dies irae," where terror and beauty collide, and the "Sanctus," a celestial burst of clarity. The "Libera me" is not just sung; it's unleashed—a raw, pleading force of nature that will seize your soul.
-
-Buckle up for an audacious concert where the sacred meets the gut-wrenching drama of the opera house. Forget what you thought you knew—this is Verdi, reinvented`;
-
+    const eventsByMonth = groupByMonth(events);
 
     return (
-       <>
+       <div className="cards-container">
        <h2>Summer Events</h2>
-       <div className="June">
-        <h3>June</h3>
-        
-        <Card 
-        src={june1} 
-        title="Rediscover Verdi's Requiem"
-        description={j1}
-        location="test"/>
-
-       </div>
-       <div className="July">
-        <h3>June</h3>
-       </div>
-       <div className="August">
-        <h3>June</h3>
-       </div>
-
-       <h2>Autumn Events</h2>
-       <div className="September">
-        <h3>June</h3>
-
-       </div>
-       <div className="October">
-        <h3>June</h3>
-
-       </div>
-       <div className="November">
-        <h3>June</h3>
-
-       </div>
-       
-
-       </> 
+       {Object.entries(eventsByMonth).map(([month, monthevents]) => (
+        <section key={month} className="month-section">
+            <h3>{month}</h3>
+            <div className="cards-grid">
+                {monthevents.map((event, index) => (
+                    <div key={index} className="card">
+                        <img src={event.img} alt={event.name} className="card-image"/>
+                        <div className="card-content">
+                            <h4>{event.name}</h4>
+                            <p>{event.description}</p>
+                            <p className="card-details">{event.details}</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </section>
+       ))}
+       </div> 
     )
-
 }
 
 export default Cards;
